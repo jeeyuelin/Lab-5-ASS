@@ -3,30 +3,61 @@
 <head>
     <title>Book Collection</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 8px;
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
+    <h1>Book Collection</h1>
     <div id="output">
-    <!-- Results will appear here -->
+        <!-- Results will load here -->
     </div>
 
     <script>
         $(document).ready(function() {
-            $.getJSON("books.json", function(data) {
+            // Use this path for GitHub Pages:
+            const jsonUrl = 'https://raw.githubusercontent.com/YOUR_USERNAME/Lab-5-ASS/main/books.json';
+            
+            // For local testing, use this instead:
+            // const jsonUrl = 'books.json';
+
+            $.getJSON(jsonUrl, function(data) {
                 // a) First book title
-                $("#output").append(`<p>First title: ${data.Books[0].title}</p>`);
-
+                $("#output").append(`<div class="book-info"><h2>${data.Books[0].title}</h2>`);
+                
                 // b) Second book author
-                $("#output").append(`<p>Second author: ${data.Books[1].author}</p>`);
-
+                $("#output").append(`<p><strong>Author:</strong> ${data.Books[1].author}</p>`);
+                
                 // c) All genres
-                let genresHTML = "<h3>Genres:</h3><ul>";
+                let genresHTML = "<h3>All Genres:</h3><ul>";
                 data.Books.forEach(book => {
-                    genresHTML += `<li>${book.title}: ${book.genres.join(", ")}</li>`;
+                    genresHTML += `
+                        <li>
+                            <strong>${book.title}:</strong> 
+                            ${book.genres.join(", ")} 
+                            (${book.publicationYear})
+                        </li>`;
                 });
                 genresHTML += "</ul>";
                 $("#output").append(genresHTML);
-            }).fail(function() {
-                console.error("Error loading JSON file");
+            }).fail(function(jqxhr, textStatus, error) {
+                const err = textStatus + ", " + error;
+                $("#output").html(`<div class="error">Error loading book data: ${err}</div>`);
+                console.error("Error loading JSON: ", err);
             });
         });
     </script>
