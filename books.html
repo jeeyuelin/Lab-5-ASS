@@ -6,7 +6,7 @@
 </head>
 <body>
     <div id="output">
-        <!-- Results will appear here -->
+    <!-- Results will appear here -->
     </div>
 
     <script>
@@ -14,16 +14,19 @@
             $.getJSON("books.json", function(data) {
                 // a) First book title
                 $("#output").append(`<p>First title: ${data.Books[0].title}</p>`);
-                
+
                 // b) Second book author
                 $("#output").append(`<p>Second author: ${data.Books[1].author}</p>`);
-                
+
                 // c) All genres
                 let genresHTML = "<h3>Genres:</h3><ul>";
                 data.Books.forEach(book => {
                     genresHTML += `<li>${book.title}: ${book.genres.join(", ")}</li>`;
                 });
+                genresHTML += "</ul>";
                 $("#output").append(genresHTML);
+            }).fail(function() {
+                console.error("Error loading JSON file");
             });
         });
     </script>
