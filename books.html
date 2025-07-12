@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Collection</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="output">
+        <!-- Results will appear here -->
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.getJSON("books.json", function(data) {
+                // a) First book title
+                $("#output").append(`<p>First title: ${data.Books[0].title}</p>`);
+                
+                // b) Second book author
+                $("#output").append(`<p>Second author: ${data.Books[1].author}</p>`);
+                
+                // c) All genres
+                let genresHTML = "<h3>Genres:</h3><ul>";
+                data.Books.forEach(book => {
+                    genresHTML += `<li>${book.title}: ${book.genres.join(", ")}</li>`;
+                });
+                $("#output").append(genresHTML);
+            });
+        });
+    </script>
+</body>
+</html>
